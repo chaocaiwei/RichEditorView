@@ -16,7 +16,7 @@
  "use strict";
 
 var RE = {};
-
+RE.baseUrl = ''
 RE.editor = document.getElementById('editor');
 
 // Not universally supported, but seems to work in iOS 7 and 8
@@ -100,9 +100,15 @@ RE.setHtml = function(contents) {
     var tempWrapper = document.createElement('div');
     tempWrapper.innerHTML = contents;
     var images = tempWrapper.querySelectorAll("img");
-
+    
     for (var i = 0; i < images.length; i++) {
-        images[i].onload = RE.updateHeight;
+        var img = images[i]
+        var scr = img.getAttribute('src')
+        if (scr.indexOf('http') == -1) {
+            var url = RE.baseUrl + scr
+            img.setAttribute("src", url);
+        }
+        img.onload = RE.updateHeight;
     }
 
     RE.editor.innerHTML = tempWrapper.innerHTML;

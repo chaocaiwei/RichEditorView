@@ -264,6 +264,16 @@ public class RichEditorWebView: WKWebView {
         runJS("RE.setBackgroundColor('\(color.hex)')")
     }
     
+    public func setBaseUrl (_ url: String) {
+        var url = url
+        if !url.hasSuffix("/") {
+            url += "/"
+        }
+        let script = WKUserScript(source: "RE.baseUrl = '\(url)'", injectionTime: .atDocumentEnd, forMainFrameOnly: false)
+        self.webView.configuration.userContentController.addUserScript(script)
+        runJS("RE.baseUrl = '\(url)'")
+    }
+    
     public func undo() {
         runJS("RE.undo()")
     }
@@ -351,7 +361,7 @@ public class RichEditorWebView: WKWebView {
         runJS("RE.insertImage('\(url.escaped)', '\(alt.escaped)')")
     }
 
-    public func insertVideo(video: String, isBase64: Bool=false) {
+    public func insertVideo(video: String, isBase64: Bool=false,offline: Bool = false,vidURL: String) {
             // Remember, both poster and src can be base64 encoded
             runJS("RE.prepareInsert()")
             var theJS: String
@@ -403,7 +413,7 @@ public class RichEditorWebView: WKWebView {
     
     public func addRowToTable() { runJS("RE.addRowToTable()") }
     public func deleteRowFromTable() { runJS("RE.deleteRowFromTable()") }
-    public func addRowToTable() { runJS("RE.addRowToTable()") }
+//    public func addRowToTable() { runJS("RE.addRowToTable()") }
     public func deleteColumnFromTable() { runJS("RE.addRowToTable()") }
     
     
